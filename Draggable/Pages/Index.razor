@@ -1,0 +1,42 @@
+﻿@page "/"
+
+@inject InMemoryDispatcher Dispatcher
+@inherits StatefulBaseComponent
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<button @onclick="async () => await AddTodo()">AddTodo</button>
+<Templated>
+    <MyContent>Hey</MyContent>
+    <MyContent>Hey2</MyContent>
+    <MyContent>Hey3</MyContent>
+</Templated>
+
+<SurveyPrompt Title="How is Blazor working for you?"/>
+
+@if(TodoState.Favorite != null)
+{
+    <h1>@(TodoState.Favorite!.Description) + @(TodoState.Favorite!.Id)</h1>
+}
+
+@foreach (var todo in TodoState.Todos)
+{
+    <p>@todo.Description + @todo.Id</p>
+    <button @onclick="async () => await Dispatcher.ExecuteAsync(new Commands.RemoveTodo(todo.Id))">Remove</button>
+    <button @onclick="async () => await Dispatcher.ExecuteAsync(new Commands.FavouriteTodoItem(todo.Id))">Set Favourite</button>
+}
+
+@code {
+
+    private TodoState TodoState => AppStore.GetState<TodoState>();
+    
+    private async Task AddTodo()
+    {
+        await Dispatcher.ExecuteAsync(new Commands.AddTodo("Test"));
+    }
+
+}

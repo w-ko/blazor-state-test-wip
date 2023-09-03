@@ -1,0 +1,15 @@
+<div>
+    @* @ChildContent(@:@ *@
+    @* { *@
+    @*     MyContent("Hello World"); *@
+    @* }) *@
+</div>
+@code {
+
+    [Parameter]
+    public RenderFragment<string> MyContent { get; set; } = default!;
+    
+    [Parameter]
+    public RenderFragment<RenderFragment> ChildContent { get; set; } = default!;
+
+}
